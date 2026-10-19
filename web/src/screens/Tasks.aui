@@ -1,0 +1,127 @@
+Page Tasks
+  Row
+    Heading level=1 $title
+    Spacer
+    Button variant=secondary action=manage "Lists & sharing"
+    Button action=newTask "+ Add task"
+    Button variant=secondary action=board $boardLabel
+    Button variant=secondary action=export "Export ICS"
+  Row
+    Input name=quickTitle placeholder="Add a task and press Enter…" action=quickAdd
+    Button action=quickAdd "Add"
+  Row
+    Input name=query action=search type=search placeholder="Search title, description or tags"
+    Button variant=secondary action=search "Search"
+    Button variant=secondary action=saveView "Save view"
+    Select name=bulkAction options=$bulkActions
+    Select name=bulkList options=$listOptions
+    Button variant=secondary action=bulk "Apply to selected"
+  If condition=$empty
+    Card variant=empty
+      Icon name=ShieldCheck
+      Heading level=2 "A little clarity for your day"
+      Text "Add your first task, plan a date or share a list with your team."
+      Button action=newTask "Create a task"
+  Grid columns=$columnCount
+    For each=$columns
+      Card
+        Heading level=2 $item.name
+        For each=$item.tasks
+          Row variant=task item=$item.id draggable=true
+            Button variant=secondary item=$item.id action=select aria-label="Select $item.title" aria-pressed=$item.isSelected $item.selection
+            Button variant=secondary item=$item.id action=toggle aria-label=$item.toggleLabel aria-pressed=$item.isDone $item.check
+            Stack gap=xs
+              Link href=$item.href $item.title
+              Text variant=caption $item.detail
+            Button variant=secondary item=$item.id action=star aria-label="Star $item.title" aria-pressed=$item.starred $item.star
+            Button variant=secondary item=$item.id action=edit "Edit"
+  If condition=$hasMore
+    Button variant=secondary action=more "Load more tasks"
+  If condition=$editing
+    Card variant=dialog aria-label="Task editor"
+      Heading level=2 $editorTitle
+      If condition=$editorError
+        Alert tone=error $editorError
+      If condition=$editorBusy
+        Text $editorBusy
+      Field label="Title"
+        Input name=title autoFocus=true placeholder="What needs doing?"
+      Field label="List"
+        Select name=listId options=$listOptions
+      Field label="Description (Markdown)"
+        Input name=description multiline=true
+      Section id=description-preview
+      Field label="Notes"
+        Input name=notes multiline=true
+      Grid columns=3
+        Field label="Due date & time"
+          Input name=dueLocal type=datetime-local
+        Field label="IANA timezone"
+          Input name=timezone placeholder="Europe/London"
+        Field label="Priority"
+          Select name=priority options=$priorityOptions
+      Grid columns=3
+        Field label="Status"
+          Select name=status options=$statusOptions
+        Field label="Tags, separated by commas"
+          Input name=tags
+        Field label="Position"
+          Input name=position type=number
+      Grid columns=2
+        Field label="Reminder"
+          Input name=reminderLocal type=datetime-local
+        Field label="Snooze until"
+          Input name=snoozeLocal type=datetime-local
+      Field label="Recurrence (new task only; e.g. FREQ=WEEKLY;BYDAY=MO,WE)"
+        Input name=rule
+      Field label="Recurrence exceptions (YYYY-MM-DD, comma separated)"
+        Input name=exceptions
+      Field label="Parent task ID (optional, new subtasks only)"
+        Input name=parentId
+      Field label="Calendar event link (explicit link only)"
+        Input name=calendarLink placeholder="/calendar/…"
+      Field label="Notes document link (explicit link only)"
+        Input name=notesLink placeholder="/notes/…"
+      Row
+        Button action=saveTask "Save task"
+        Button variant=secondary action=closeEditor "Close"
+        If condition=$existingTask
+          Button variant=danger action=deleteTask "Delete task"
+  If condition=$managing
+    Card
+      Heading level=2 "Lists & sharing"
+      Row
+        Input name=listName placeholder="New list name"
+        Button action=createList "Create list"
+      Text "Sharing uses the member's immutable MyAccounts ID, shown in their app Settings. Members can be viewers or editors."
+      Row
+        Select name=shareList options=$allListOptions
+        Input name=memberSubject placeholder="MyAccounts ID"
+        Select name=memberRole options=$memberRoles
+        Button variant=secondary action=share "Share list"
+        Button variant=secondary action=members "Show members"
+      Row
+        Input name=renameList placeholder="New name for selected list"
+        Button variant=secondary action=renameList "Rename list"
+        Button variant=danger action=deleteList "Delete selected list"
+      For each=$members
+        Row
+          Text $item.id
+          Badge $item.role
+          Button variant=secondary item=$item.id action=unshare "Remove access"
+  If condition=$hasNotifications
+    Card
+      Heading level=2 "Reminders"
+      Text variant=caption "In-app delivery is always available. External notification services are not configured."
+      For each=$notifications
+        Row
+          Link href=$item.href $item.title
+          Text variant=caption $item.at
+          Button variant=secondary item=$item.id action=read "Mark read"
+  If condition=$hasSavedViews
+    Card
+      Heading level=2 "Saved views"
+      For each=$savedViews
+        Row
+          Link href=$item.href $item.name
+          Button variant=secondary item=$item.id action=deleteView "Remove"
