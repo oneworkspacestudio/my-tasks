@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-var version = "0.1.0-preview.1"
+var version = "0.1.0-preview.2"
 
 func main() {
 	if e := apphost.Main(apphost.Config{ID: "tasks", Name: "My Tasks", Version: version, Listen: "127.0.0.1:9008"}, webui.Files(), func(h *apphost.Host) (apphost.Application, error) { return app.New(h) }); e != nil {
