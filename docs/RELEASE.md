@@ -1,4 +1,7 @@
-# My Tasks 0.1.0-preview.3
+# My Tasks 0.1.0-preview.4
+
+Preview4 corrects the browser tab title to Tasks after a live preview3 check
+found an incorrectly encoded separator. Task data and app contracts are unchanged.
 
 The mobile task screen follows the supplied Google Tasks reference: peach canvas,
 centered Tasks title, horizontal list tabs, warm rounded task cards, circular

@@ -29,3 +29,17 @@ publish and promote public channel in dedicated workspace-tasks-ui worktree.
 Both owners currently Workspace92; use normal backed-up tasks-only apply and verify
 served assets/all services/version retention. Do not overwrite concurrent Maps or
 other independent updates. Public releases are immutable; Actions remain disabled.
+
+## Preview3 installed; final title correction
+
+Preview3 source85f035b/public assets and channelb6f88cc were verified; normal
+Tasks-only updates completed on BOTH PCs. Primary exact byte/config/identity
+receipt passed, all27 services and all JS/CSS/fonts matched. Secondary normal
+update completed in2m24s, all27 public services running, Tasks3 runtime and other
+25 displayed versions retained. Its stale progress page needed one read-only
+reload after restart; no second apply was submitted.
+
+Live inspection found an introduced double-encoded separator in the browser tab
+title. Preparing immutable preview4 with plain Tasks title and updated version
+metadata, preserving the already accepted layout/behavior. Do not claim final
+preview4 publication/installation until its receipts exist. Old3 remains immutable.
