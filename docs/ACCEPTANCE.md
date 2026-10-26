@@ -31,3 +31,14 @@ They cover list switching, starring, completion/reopening, task creation/editing
 persistence on reload, advanced fields, new-list dialog, account switching and
 stale-account rejection. Captures at384x776,320x640 dark and1440x1000 were inspected.
 Roboto and its license are included. No live owner tasks were used as fixtures.
+
+Final preview4 also corrects the browser title to Tasks. Its clean release build,
+Go tests/vet and exact-package native Chrome flows passed. A fresh NTFS module
+cache used31 local archives independently checked against committed go.sum after
+shared-drive cache access stalled. Both real installations completed normal
+backed-up Tasks-only updates. Primary exact binaries/assets and owner/unselected
+app invariants were audited; secondary retained25 other displayed versions. All27
+services were verified on both public origins. Primary Cinema's restart timeout
+was recovered through normal app retry. Live owner task data was never a fixture.
+The final title fix leaves accepted JS/CSS/font bytes unchanged. Synthetic mobile
+captures establish responsive layout; deployed visual inspection was desktop.

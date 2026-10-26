@@ -43,3 +43,36 @@ Live inspection found an introduced double-encoded separator in the browser tab
 title. Preparing immutable preview4 with plain Tasks title and updated version
 metadata, preserving the already accepted layout/behavior. Do not claim final
 preview4 publication/installation until its receipts exist. Old3 remains immutable.
+
+## Final publication and both-PC delivery complete
+
+Public Tasks4 source71a822e6bb920fd0e27de1dd2b2e15d9cbed31d2; executable SHA256
+dc82d585b0316dd4513f41bdd5e212fba0ea2f967c026de8cd98633fac1e5958.
+All13 release assets/digests and anonymous EXE/manifest/channel verified. Suite
+promotion0926501 changes only Tasks pin/default; prior records/withholdings remain.
+Public3 and4 tags/assets are immutable. Workspace manager92 is unchanged.
+
+Final clean4 build: frontend/AUI contracts, Go tests/vet and exact-native Chrome
+task/list/account flows pass. The shared I-drive dependency reads stalled during
+repeat checks; stopped only task-owned invocations. Verified31 local module ZIPs
+against committed go.sum and staged them in the named NTFS cache; complete final
+release checks then passed. JS/CSS/Roboto bytes are identical to accepted3.
+
+Both normal protected Tasks-only updates completed4. Primary independent audit
+confirms exact EXE, identity/credentials/config/paths/app selection and all other
+app contracts/package/executable bytes retained. All JS/CSS/fonts served match the
+tested package. Cinema exceeded90-second startup readiness after the full restart;
+normal RetryInstalledApps restored it without restarting healthy apps. All27
+services verified locally and through primary public Chrome health.
+Secondary completed in2m16s; all25 other displayed versions retained, all27 public
+services running, Tasks4 runtime, plain Tasks title and expected hashed JS/CSS seen.
+Its progress page needed a read-only reload after restart, never a repeated apply.
+
+Synthetic phone/small-dark/desktop visuals and flows use only fixture records.
+Deployed browser visual review was at desktop size; the browser viewport override
+did not change screenshot dimensions, so native Playwright captures are the mobile
+evidence. No owner functional fixtures, physical-phone/clean-host/reboot claim.
+Newest recovery/full snapshots retained by normal updater. Fixture29718 stopped;
+all named NTFS source/dependency/test data removed after process/path/reparse checks.
+No current task work remains. Artifacts/receipts remain in I tooling; do not rerun
+applies or rewrite public tags. Future updates must preserve concurrent app work.
