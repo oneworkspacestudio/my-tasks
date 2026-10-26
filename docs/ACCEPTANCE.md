@@ -19,3 +19,15 @@ Go source vulnerability scans for Tasks and PDF found no reachable or imported-p
 A second physical clean host, actual reboot/service transition and independent security audit remain unverified. Local test scripts and synthetic evidence are available; these limits are why the distribution is explicitly a preview.
 
 The actual preview.36 installer produced a three-app legacy installation. Updating Workspace added all four new defaults and preserved existing identity/ports. Updating Notes separately to preview.5 then passed the same full managed flow. Search gives older Notes installations an explicit update action. All four Go source scans reported zero reachable or imported-package findings (module-only findings retained). Account response/mutation binding and same-window unsaved-field clearing are covered by the final regression pass.
+
+## Mobile layout update — 2026-10-26
+
+Preview3 uses the supplied mobile Google Tasks screenshot as its visual reference.
+AUI regeneration, TypeScript/Vite, frontend contracts, Go application tests and vet
+passed locally. The first Go invocation used an exFAT temporary directory and was
+correctly refused; the same tests passed with the dedicated NTFS test directory.
+Native Chrome checks use only an isolated local account and synthetic task lists.
+They cover list switching, starring, completion/reopening, task creation/editing,
+persistence on reload, advanced fields, new-list dialog, account switching and
+stale-account rejection. Captures at384x776,320x640 dark and1440x1000 were inspected.
+Roboto and its license are included. No live owner tasks were used as fixtures.

@@ -1,37 +1,17 @@
 Page Shell
-  Stack variant=sidebar
-    Row variant=brand
-      Image src=$logo alt=$name width=38 height=38
-      Stack gap=xs
-        Heading level=2 $name
-        Text variant=caption "ONE WORKSPACE"
-    For each=$nav
-      Link href=$item.href variant=$item.variant
-        Text $item.title
-    Spacer
-    Text variant=caption "Your data stays on your server."
-    Link href="#settings" variant=nav "Settings & backup"
-    If condition=$workspace
-      Link href=$workspace variant=nav "← One Workspace"
   Stack variant=workspace
-    Row variant=topbar
-      Heading level=2 $heading
-      Spacer
-      If condition=$searchURL
-        Link href=$searchURL "Search Workspace"
-      Button variant=icon action=theme aria-label="Toggle color theme"
-        Icon name=SunMoon
-      If condition=$workspace
-        Button variant=secondary action=apps "Apps"
-      Text $user.name
-      Button variant=secondary action=logout "Sign out"
+    If condition=$settingsPage
+      Row variant=settings-header
+        Link href="#view=inbox" "← Tasks"
+        Spacer
+        Button variant=text action=apps "Apps"
     Stack variant=content
       If condition=$error
         Alert tone=error $error
       If condition=$notice
         Alert tone=success $notice
       If condition=$busy
-        Row
+        Row variant=saving
           Spinner
           Text $busy
       Section id=screen-outlet

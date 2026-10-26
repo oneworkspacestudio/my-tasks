@@ -4,13 +4,15 @@
 
 Private and shared tasks, recurring plans and reminders. An original Apache-2.0 One Workspace application; not an upstream fork.
 
-![My Tasks application](docs/assets/screenshot.jpg)
+![My Tasks mobile screen](docs/assets/tasks-mobile.png)
 
 ## Windows download
 
-Download the Windows x64 ZIP from [Releases](https://github.com/oneworkspacestudio/my-tasks/releases). Verify SHA256SUMS.txt, extract to a program folder and run **MyTasks.exe**. No Docker, WSL, Node.js or Python is needed at runtime. A modern browser and a dedicated **NTFS** data folder are required. This is a **0.1.0-preview.1** release; unsigned Windows executables may prompt for trust.
+Download the Windows x64 ZIP from [Releases](https://github.com/oneworkspacestudio/my-tasks/releases). Verify SHA256SUMS.txt, extract to a program folder and run **MyTasks.exe**. No Docker, WSL, Node.js or Python is needed at runtime. A modern browser and a dedicated **NTFS** data folder are required. This is a **0.1.0-preview.3** release; unsigned Windows executables may prompt for trust.
 
 The simplest managed installation is [One Workspace](https://github.com/oneworkspacestudio/one-workspace). New default apps are installed during manager updates unless explicitly excluded. Existing app data and user files are preserved.
+
+The task screen uses list tabs, completion circles, stars and a collapsible Completed section. Tap the plus button to add a task. Open the list menu for search, sharing and more tools, or your avatar for settings and Workspace apps.
 
 ## Included
 

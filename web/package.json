@@ -1,6 +1,6 @@
 {
   "name": "@oneworkspacestudio/my-tasks",
-  "version": "0.1.0-preview.2",
+  "version": "0.1.0-preview.3",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,6 +11,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@fontsource/roboto": "5.3.0",
     "lucide-react": "^0.577.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",

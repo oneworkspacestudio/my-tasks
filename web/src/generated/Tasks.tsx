@@ -4,56 +4,150 @@ import { Alert, Badge, Button, Card, Field, Grid, Heading, Icon, Input, Link, Pa
 export function Tasks({ data, onAction }: { data: any; onAction: (name: string) => void }) {
   return (
     <Page>
-      <Row>
-        <Heading level={1}>{data.title}</Heading>
-        <Spacer />
-        <Button variant="secondary" onClick={() => onAction("manage")}>Lists & sharing</Button>
-        <Button onClick={() => onAction("newTask")}>+ Add task</Button>
-        <Button variant="secondary" onClick={() => onAction("board")}>{data.boardLabel}</Button>
-        <Button variant="secondary" onClick={() => onAction("export")}>Export ICS</Button>
+      <Row variant="tasks-header">
+        <Heading level={1}>Tasks</Heading>
+        <Button variant="avatar" onClick={() => onAction("account")} aria-label="Account menu">{data.accountInitial}</Button>
       </Row>
-      <Row>
-        <Input name="quickTitle" placeholder="Add a task and press Enter…" onClick={() => onAction("quickAdd")} />
-        <Button onClick={() => onAction("quickAdd")}>Add</Button>
-      </Row>
-      <Row>
-        <Input name="query" onClick={() => onAction("search")} type="search" placeholder="Search title, description or tags" />
-        <Button variant="secondary" onClick={() => onAction("search")}>Search</Button>
-        <Button variant="secondary" onClick={() => onAction("saveView")}>Save view</Button>
-        <Select name="bulkAction" options={data.bulkActions} />
-        <Select name="bulkList" options={data.listOptions} />
-        <Button variant="secondary" onClick={() => onAction("bulk")}>Apply to selected</Button>
-      </Row>
-      {data.empty && (
-        <Card variant="empty">
-          <Icon name="ShieldCheck" />
-          <Heading level={2}>A little clarity for your day</Heading>
-          <Text>Add your first task, plan a date or share a list with your team.</Text>
-          <Button onClick={() => onAction("newTask")}>Create a task</Button>
+      {data.account && (
+        <Card variant="account-menu">
+          <Text>{data.accountName}</Text>
+          {data.workspace && (
+            <Button variant="text" onClick={() => onAction("apps")}>Apps</Button>
+          )}
+          <Link href="#settings">Settings & backup</Link>
+          <Button variant="text" onClick={() => onAction("theme")}>Toggle color theme</Button>
+          <Button variant="text" onClick={() => onAction("logout")}>Sign out</Button>
         </Card>
       )}
-      <Grid columns={data.columnCount}>
-        {data.columns.map((item, i) => (
-          <Card key={i}>
-            <Heading level={2}>{item.name}</Heading>
-            {item.tasks.map((item, i) => (
-              <Row key={i} variant="task" item={item.id} draggable={true}>
-                <Button variant="secondary" item={item.id} onClick={() => onAction("select")} aria-label="Select $item.title" aria-pressed={item.isSelected}>{item.selection}</Button>
-                <Button variant="secondary" item={item.id} onClick={() => onAction("toggle")} aria-label={item.toggleLabel} aria-pressed={item.isDone}>{item.check}</Button>
-                <Stack gap="xs">
-                  <Link href={item.href}>{item.title}</Link>
-                  <Text variant="caption">{item.detail}</Text>
-                </Stack>
-                <Button variant="secondary" item={item.id} onClick={() => onAction("star")} aria-label="Star $item.title" aria-pressed={item.starred}>{item.star}</Button>
-                <Button variant="secondary" item={item.id} onClick={() => onAction("edit")}>Edit</Button>
+      <Row variant="list-tabs">
+        {data.tabs.map((item, i) => (
+          <Link key={i} href={item.href} variant={item.variant}>
+            {item.star ? (
+              <>
+                <Icon name="Star" size={23} />
+                <Text variant="sr-only">Starred</Text>
+              </>
+            ) : (
+              <Text>{item.title}</Text>
+            )}
+          </Link>
+        ))}
+      </Row>
+      <Stack variant="task-content">
+        <Grid columns={data.columnCount}>
+          {data.columns.map((item, i) => (
+            <Card key={i} variant="task-list">
+              <Row variant="list-heading">
+                <Heading level={2}>{item.name}</Heading>
+                <Spacer />
+                <Button variant="icon" onClick={() => onAction("sort")} aria-label={data.sortAria}><Icon name="ArrowDownUp" size={23} /></Button>
+                <Button variant="icon" onClick={() => onAction("menu")} aria-label="List options"><Icon name="MoreVertical" size={23} /></Button>
               </Row>
+              {data.empty && (
+                <Stack variant="empty-tasks">
+                  <Icon name="CheckCircle2" size={56} />
+                  <Heading level={3}>{data.emptyTitle}</Heading>
+                  <Text>{data.emptyText}</Text>
+                </Stack>
+              )}
+              {item.tasks.map((item, i) => (
+                <Row key={i} variant={item.rowVariant} item={item.id} draggable={true}>
+                  <Button variant="complete" item={item.id} onClick={() => onAction("toggle")} aria-label={item.toggleLabel} aria-pressed={item.isDone}>
+                    {item.isDone && (
+                      <Icon name="Check" size={20} />
+                    )}
+                  </Button>
+                  <Stack variant="task-copy" gap="xs">
+                    <Link variant="task-title" href={item.href}>{item.title}</Link>
+                    {item.hasDescription && (
+                      <Text variant="task-description">{item.description}</Text>
+                    )}
+                    {item.hasDetail && (
+                      <Text variant="task-detail">{item.detail}</Text>
+                    )}
+                  </Stack>
+                  <Button variant={item.starVariant} item={item.id} onClick={() => onAction("star")} aria-label={item.starLabel} aria-pressed={item.starred}><Icon name="Star" size={23} /></Button>
+                </Row>
+              ))}
+            </Card>
+          ))}
+        </Grid>
+        {data.hasCompleted && (
+          <Card variant="completed">
+            <Button variant="completed-heading" onClick={() => onAction("completed")} aria-label={data.completedLabel} aria-expanded={data.completedOpen}>
+              <Text>{data.completedLabel}</Text>
+              <Spacer />
+              <Icon name={data.completedIcon} size={24} />
+            </Button>
+            {data.completedOpen && (
+              <Stack variant="completed-tasks">
+                {data.completed.map((item, i) => (
+                  <Row key={i} variant={item.rowVariant} item={item.id} draggable={true}>
+                    <Button variant="complete" item={item.id} onClick={() => onAction("toggle")} aria-label={item.toggleLabel} aria-pressed={item.isDone}>
+                      {item.isDone && (
+                        <Icon name="Check" size={20} />
+                      )}
+                    </Button>
+                    <Stack variant="task-copy" gap="xs">
+                      <Link variant="task-title" href={item.href}>{item.title}</Link>
+                      {item.hasDescription && (
+                        <Text variant="task-description">{item.description}</Text>
+                      )}
+                      {item.hasDetail && (
+                        <Text variant="task-detail">{item.detail}</Text>
+                      )}
+                    </Stack>
+                    <Button variant={item.starVariant} item={item.id} onClick={() => onAction("star")} aria-label={item.starLabel} aria-pressed={item.starred}><Icon name="Star" size={23} /></Button>
+                  </Row>
+                ))}
+              </Stack>
+            )}
+          </Card>
+        )}
+        {data.hasMore && (
+          <Button variant="text" onClick={() => onAction("more")}>Load more tasks</Button>
+        )}
+        {data.menu && (
+          <Card variant="dialog" aria-label="List options">
+            <Row>
+              <Heading level={2}>List options</Heading>
+              <Spacer />
+              <Button variant="icon" onClick={() => onAction("menu")} aria-label="Close list options"><Icon name="X" /></Button>
+            </Row>
+            <Input name="quickTitle" placeholder="Add a task and press Enter…" onClick={() => onAction("quickAdd")} />
+            <Row>
+              <Input name="query" onClick={() => onAction("search")} type="search" placeholder="Search title, description or tags" />
+              <Button variant="text" onClick={() => onAction("search")}>Search</Button>
+            </Row>
+            <Row>
+              <Button variant="text" onClick={() => onAction("manage")}>Lists & sharing</Button>
+              <Button variant="text" onClick={() => onAction("board")}>{data.boardLabel}</Button>
+              <Button variant="text" onClick={() => onAction("export")}>Export ICS</Button>
+              <Button variant="text" onClick={() => onAction("saveView")}>Save view</Button>
+            </Row>
+            <Row>
+              <Select name="bulkAction" options={data.bulkActions} />
+              <Select name="bulkList" options={data.listOptions} />
+              <Button variant="text" onClick={() => onAction("bulk")}>Apply to selected</Button>
+            </Row>
+            <Row>
+              <Link href="#view=today">Today</Link>
+              <Link href="#view=upcoming">Upcoming</Link>
+              <Link href="#view=planned">Planned</Link>
+              <Link href="#view=overdue">Overdue</Link>
+              <Link href="#view=shared">Shared</Link>
+            </Row>
+            {data.columns.map((item, i) => (
+              <Stack key={i}>
+                {item.tasks.map((item, i) => (
+                  <Button key={i} variant="text" item={item.id} onClick={() => onAction("select")} aria-pressed={item.isSelected}>Select {item.title} {item.selection}</Button>
+                ))}
+              </Stack>
             ))}
           </Card>
-        ))}
-      </Grid>
-      {data.hasMore && (
-        <Button variant="secondary" onClick={() => onAction("more")}>Load more tasks</Button>
-      )}
+        )}
+        <Button variant="fab" onClick={() => onAction("newTask")} aria-label="Create a task"><Icon name="Plus" size={28} /></Button>
+      </Stack>
       {data.editing && (
         <Card variant="dialog" aria-label="Task editor">
           <Heading level={2}>{data.editorTitle}</Heading>
@@ -63,30 +157,35 @@ export function Tasks({ data, onAction }: { data: any; onAction: (name: string) 
           {data.editorBusy && (
             <Text>{data.editorBusy}</Text>
           )}
-          <Field label="Title"><Input name="title" autoFocus={true} placeholder="What needs doing?" /></Field>
+          <Field label="Title"><Input name="title" autoFocus={true} placeholder="New task" /></Field>
           <Field label="List"><Select name="listId" options={data.listOptions} /></Field>
-          <Field label="Description (Markdown)"><Input name="description" multiline={true} /></Field>
+          <Field label="Details"><Input name="description" multiline={true} /></Field>
           <Section id="description-preview" />
-          <Field label="Notes"><Input name="notes" multiline={true} /></Field>
-          <Grid columns={3}>
-            <Field label="Due date & time"><Input name="dueLocal" type="datetime-local" /></Field>
-            <Field label="IANA timezone"><Input name="timezone" placeholder="Europe/London" /></Field>
-            <Field label="Priority"><Select name="priority" options={data.priorityOptions} /></Field>
-          </Grid>
-          <Grid columns={3}>
-            <Field label="Status"><Select name="status" options={data.statusOptions} /></Field>
-            <Field label="Tags, separated by commas"><Input name="tags" /></Field>
-            <Field label="Position"><Input name="position" type="number" /></Field>
-          </Grid>
-          <Grid columns={2}>
-            <Field label="Reminder"><Input name="reminderLocal" type="datetime-local" /></Field>
-            <Field label="Snooze until"><Input name="snoozeLocal" type="datetime-local" /></Field>
-          </Grid>
-          <Field label="Recurrence (new task only; e.g. FREQ=WEEKLY;BYDAY=MO,WE)"><Input name="rule" /></Field>
-          <Field label="Recurrence exceptions (YYYY-MM-DD, comma separated)"><Input name="exceptions" /></Field>
-          <Field label="Parent task ID (optional, new subtasks only)"><Input name="parentId" /></Field>
-          <Field label="Calendar event link (explicit link only)"><Input name="calendarLink" placeholder="/calendar/…" /></Field>
-          <Field label="Notes document link (explicit link only)"><Input name="notesLink" placeholder="/notes/…" /></Field>
+          <Button variant="text" onClick={() => onAction("advanced")}>More options</Button>
+          {data.advanced && (
+            <>
+              <Field label="Notes"><Input name="notes" multiline={true} /></Field>
+              <Grid columns={3}>
+                <Field label="Due date & time"><Input name="dueLocal" type="datetime-local" /></Field>
+                <Field label="IANA timezone"><Input name="timezone" placeholder="Europe/London" /></Field>
+                <Field label="Priority"><Select name="priority" options={data.priorityOptions} /></Field>
+              </Grid>
+              <Grid columns={3}>
+                <Field label="Status"><Select name="status" options={data.statusOptions} /></Field>
+                <Field label="Tags, separated by commas"><Input name="tags" /></Field>
+                <Field label="Position"><Input name="position" type="number" /></Field>
+              </Grid>
+              <Grid columns={2}>
+                <Field label="Reminder"><Input name="reminderLocal" type="datetime-local" /></Field>
+                <Field label="Snooze until"><Input name="snoozeLocal" type="datetime-local" /></Field>
+              </Grid>
+              <Field label="Recurrence (new task only; e.g. FREQ=WEEKLY;BYDAY=MO,WE)"><Input name="rule" /></Field>
+              <Field label="Recurrence exceptions (YYYY-MM-DD, comma separated)"><Input name="exceptions" /></Field>
+              <Field label="Parent task ID (optional, new subtasks only)"><Input name="parentId" /></Field>
+              <Field label="Calendar event link (explicit link only)"><Input name="calendarLink" placeholder="/calendar/…" /></Field>
+              <Field label="Notes document link (explicit link only)"><Input name="notesLink" placeholder="/notes/…" /></Field>
+            </>
+          )}
           <Row>
             <Button onClick={() => onAction("saveTask")}>Save task</Button>
             <Button variant="secondary" onClick={() => onAction("closeEditor")}>Close</Button>
@@ -97,8 +196,12 @@ export function Tasks({ data, onAction }: { data: any; onAction: (name: string) 
         </Card>
       )}
       {data.managing && (
-        <Card>
-          <Heading level={2}>Lists & sharing</Heading>
+        <Card variant="dialog" aria-label="Lists & sharing">
+          <Row>
+            <Heading level={2}>Lists & sharing</Heading>
+            <Spacer />
+            <Button variant="text" onClick={() => onAction("manage")}>Close</Button>
+          </Row>
           <Row>
             <Input name="listName" placeholder="New list name" />
             <Button onClick={() => onAction("createList")}>Create list</Button>

@@ -1,42 +1,107 @@
 Page Tasks
-  Row
-    Heading level=1 $title
-    Spacer
-    Button variant=secondary action=manage "Lists & sharing"
-    Button action=newTask "+ Add task"
-    Button variant=secondary action=board $boardLabel
-    Button variant=secondary action=export "Export ICS"
-  Row
-    Input name=quickTitle placeholder="Add a task and press Enter…" action=quickAdd
-    Button action=quickAdd "Add"
-  Row
-    Input name=query action=search type=search placeholder="Search title, description or tags"
-    Button variant=secondary action=search "Search"
-    Button variant=secondary action=saveView "Save view"
-    Select name=bulkAction options=$bulkActions
-    Select name=bulkList options=$listOptions
-    Button variant=secondary action=bulk "Apply to selected"
-  If condition=$empty
-    Card variant=empty
-      Icon name=ShieldCheck
-      Heading level=2 "A little clarity for your day"
-      Text "Add your first task, plan a date or share a list with your team."
-      Button action=newTask "Create a task"
-  Grid columns=$columnCount
-    For each=$columns
-      Card
-        Heading level=2 $item.name
-        For each=$item.tasks
-          Row variant=task item=$item.id draggable=true
-            Button variant=secondary item=$item.id action=select aria-label="Select $item.title" aria-pressed=$item.isSelected $item.selection
-            Button variant=secondary item=$item.id action=toggle aria-label=$item.toggleLabel aria-pressed=$item.isDone $item.check
-            Stack gap=xs
-              Link href=$item.href $item.title
-              Text variant=caption $item.detail
-            Button variant=secondary item=$item.id action=star aria-label="Star $item.title" aria-pressed=$item.starred $item.star
-            Button variant=secondary item=$item.id action=edit "Edit"
-  If condition=$hasMore
-    Button variant=secondary action=more "Load more tasks"
+  Row variant=tasks-header
+    Heading level=1 "Tasks"
+    Button variant=avatar action=account aria-label="Account menu" $accountInitial
+  If condition=$account
+    Card variant=account-menu
+      Text $accountName
+      If condition=$workspace
+        Button variant=text action=apps "Apps"
+      Link href="#settings" "Settings & backup"
+      Button variant=text action=theme "Toggle color theme"
+      Button variant=text action=logout "Sign out"
+  Row variant=list-tabs
+    For each=$tabs
+      Link href=$item.href variant=$item.variant
+        If condition=$item.star
+          Icon name=Star size=23
+          Text variant=sr-only "Starred"
+        Else
+          Text $item.title
+  Stack variant=task-content
+    Grid columns=$columnCount
+      For each=$columns
+        Card variant=task-list
+          Row variant=list-heading
+            Heading level=2 $item.name
+            Spacer
+            Button variant=icon action=sort aria-label=$sortAria
+              Icon name=ArrowDownUp size=23
+            Button variant=icon action=menu aria-label="List options"
+              Icon name=MoreVertical size=23
+          If condition=$empty
+            Stack variant=empty-tasks
+              Icon name=CheckCircle2 size=56
+              Heading level=3 $emptyTitle
+              Text $emptyText
+          For each=$item.tasks
+            Row variant=$item.rowVariant item=$item.id draggable=true
+              Button variant=complete item=$item.id action=toggle aria-label=$item.toggleLabel aria-pressed=$item.isDone
+                If condition=$item.isDone
+                  Icon name=Check size=20
+              Stack variant=task-copy gap=xs
+                Link variant=task-title href=$item.href $item.title
+                If condition=$item.hasDescription
+                  Text variant=task-description $item.description
+                If condition=$item.hasDetail
+                  Text variant=task-detail $item.detail
+              Button variant=$item.starVariant item=$item.id action=star aria-label=$item.starLabel aria-pressed=$item.starred
+                Icon name=Star size=23
+    If condition=$hasCompleted
+      Card variant=completed
+        Button variant=completed-heading action=completed aria-label=$completedLabel aria-expanded=$completedOpen
+          Text $completedLabel
+          Spacer
+          Icon name=$completedIcon size=24
+        If condition=$completedOpen
+          Stack variant=completed-tasks
+            For each=$completed
+              Row variant=$item.rowVariant item=$item.id draggable=true
+                Button variant=complete item=$item.id action=toggle aria-label=$item.toggleLabel aria-pressed=$item.isDone
+                  If condition=$item.isDone
+                    Icon name=Check size=20
+                Stack variant=task-copy gap=xs
+                  Link variant=task-title href=$item.href $item.title
+                  If condition=$item.hasDescription
+                    Text variant=task-description $item.description
+                  If condition=$item.hasDetail
+                    Text variant=task-detail $item.detail
+                Button variant=$item.starVariant item=$item.id action=star aria-label=$item.starLabel aria-pressed=$item.starred
+                  Icon name=Star size=23
+    If condition=$hasMore
+      Button variant=text action=more "Load more tasks"
+    If condition=$menu
+      Card variant=dialog aria-label="List options"
+        Row
+          Heading level=2 "List options"
+          Spacer
+          Button variant=icon action=menu aria-label="Close list options"
+            Icon name=X
+        Input name=quickTitle placeholder="Add a task and press Enter…" action=quickAdd
+        Row
+          Input name=query action=search type=search placeholder="Search title, description or tags"
+          Button variant=text action=search "Search"
+        Row
+          Button variant=text action=manage "Lists & sharing"
+          Button variant=text action=board $boardLabel
+          Button variant=text action=export "Export ICS"
+          Button variant=text action=saveView "Save view"
+        Row
+          Select name=bulkAction options=$bulkActions
+          Select name=bulkList options=$listOptions
+          Button variant=text action=bulk "Apply to selected"
+        Row
+          Link href="#view=today" "Today"
+          Link href="#view=upcoming" "Upcoming"
+          Link href="#view=planned" "Planned"
+          Link href="#view=overdue" "Overdue"
+          Link href="#view=shared" "Shared"
+        For each=$columns
+          Stack
+            For each=$item.tasks
+              Button variant=text item=$item.id action=select aria-pressed=$item.isSelected "Select $item.title $item.selection"
+    Button variant=fab action=newTask aria-label="Create a task"
+      Icon name=Plus size=28
   If condition=$editing
     Card variant=dialog aria-label="Task editor"
       Heading level=2 $editorTitle
@@ -45,51 +110,56 @@ Page Tasks
       If condition=$editorBusy
         Text $editorBusy
       Field label="Title"
-        Input name=title autoFocus=true placeholder="What needs doing?"
+        Input name=title autoFocus=true placeholder="New task"
       Field label="List"
         Select name=listId options=$listOptions
-      Field label="Description (Markdown)"
+      Field label="Details"
         Input name=description multiline=true
       Section id=description-preview
-      Field label="Notes"
-        Input name=notes multiline=true
-      Grid columns=3
-        Field label="Due date & time"
-          Input name=dueLocal type=datetime-local
-        Field label="IANA timezone"
-          Input name=timezone placeholder="Europe/London"
-        Field label="Priority"
-          Select name=priority options=$priorityOptions
-      Grid columns=3
-        Field label="Status"
-          Select name=status options=$statusOptions
-        Field label="Tags, separated by commas"
-          Input name=tags
-        Field label="Position"
-          Input name=position type=number
-      Grid columns=2
-        Field label="Reminder"
-          Input name=reminderLocal type=datetime-local
-        Field label="Snooze until"
-          Input name=snoozeLocal type=datetime-local
-      Field label="Recurrence (new task only; e.g. FREQ=WEEKLY;BYDAY=MO,WE)"
-        Input name=rule
-      Field label="Recurrence exceptions (YYYY-MM-DD, comma separated)"
-        Input name=exceptions
-      Field label="Parent task ID (optional, new subtasks only)"
-        Input name=parentId
-      Field label="Calendar event link (explicit link only)"
-        Input name=calendarLink placeholder="/calendar/…"
-      Field label="Notes document link (explicit link only)"
-        Input name=notesLink placeholder="/notes/…"
+      Button variant=text action=advanced "More options"
+      If condition=$advanced
+        Field label="Notes"
+          Input name=notes multiline=true
+        Grid columns=3
+          Field label="Due date & time"
+            Input name=dueLocal type=datetime-local
+          Field label="IANA timezone"
+            Input name=timezone placeholder="Europe/London"
+          Field label="Priority"
+            Select name=priority options=$priorityOptions
+        Grid columns=3
+          Field label="Status"
+            Select name=status options=$statusOptions
+          Field label="Tags, separated by commas"
+            Input name=tags
+          Field label="Position"
+            Input name=position type=number
+        Grid columns=2
+          Field label="Reminder"
+            Input name=reminderLocal type=datetime-local
+          Field label="Snooze until"
+            Input name=snoozeLocal type=datetime-local
+        Field label="Recurrence (new task only; e.g. FREQ=WEEKLY;BYDAY=MO,WE)"
+          Input name=rule
+        Field label="Recurrence exceptions (YYYY-MM-DD, comma separated)"
+          Input name=exceptions
+        Field label="Parent task ID (optional, new subtasks only)"
+          Input name=parentId
+        Field label="Calendar event link (explicit link only)"
+          Input name=calendarLink placeholder="/calendar/…"
+        Field label="Notes document link (explicit link only)"
+          Input name=notesLink placeholder="/notes/…"
       Row
         Button action=saveTask "Save task"
         Button variant=secondary action=closeEditor "Close"
         If condition=$existingTask
           Button variant=danger action=deleteTask "Delete task"
   If condition=$managing
-    Card
-      Heading level=2 "Lists & sharing"
+    Card variant=dialog aria-label="Lists & sharing"
+      Row
+        Heading level=2 "Lists & sharing"
+        Spacer
+        Button variant=text action=manage "Close"
       Row
         Input name=listName placeholder="New list name"
         Button action=createList "Create list"

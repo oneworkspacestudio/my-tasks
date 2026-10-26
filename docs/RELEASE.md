@@ -1,11 +1,19 @@
-# My Tasks 0.1.0-preview.1
+# My Tasks 0.1.0-preview.3
 
-First native Windows x64 preview from oneworkspacestudio. One main executable, embedded branded web UI, protected NTFS private data, verified MyAccounts OIDC and standalone local mode where useful. No Docker, WSL, Node.js or Python required at runtime. My PDF uses a bounded child worker of its own EXE.
+The mobile task screen follows the supplied Google Tasks reference: peach canvas,
+centered Tasks title, horizontal list tabs, warm rounded task cards, circular
+completion controls, stars, a collapsible Completed card and a bottom add button.
+Roboto is bundled locally. Phone task creation opens a bottom sheet; additional
+scheduling, recurrence, priority and integration fields remain in More options.
 
-Download the ZIP for the app, operations/recovery guides, compatibility contract, full third-party license texts and dependency inventory. SHA256SUMS.txt verifies the release files. One Workspace preview.37 installs these new defaults automatically unless explicitly excluded. Independent updates use workspace-update.json; My Search's Notes connector needs Notes preview.5 or newer (use Update all).
+List options contain search, sharing, board view, saved views, bulk actions and
+ICS export. Account settings and Workspace Apps are under the avatar. Fast list switching hides stale rows until the selected list is ready. Existing
+lists, tasks, permissions, identity, recurrence and backups retain their existing
+storage contracts. Inbox is displayed as My Tasks without renaming stored data.
+This remains an original One Workspace application with its own backend; Google
+account synchronization and Gmail task attachments are not provided.
 
-Local Windows Go tests/vet, frontend/AUI contracts, native Chrome desktop/mobile flows, consistent encrypted restore and managed suite tests passed. Managed checks include one sign-in, Drive/PDF copy round trip, actual Monitor discovery, real federated search, moved/deleted records, HTML injection safety, second-user sharing/revocation and logout. See docs/ACCEPTANCE.md for exact evidence and limits.
-
-Unsigned preview. Another clean physical host, actual reboot/service acceptance and independent penetration audit remain unverified. PDF raster exports lose text/forms/accessibility/signature validity; OCR and Office conversion are not included. Mail bodies/Chat messages are not searched; Vault secrets are excluded. Go source scans have no reachable/imported-package findings but retain module-only findings. Existing Notes retains the documented moderate sprintf-js dependency advisory. No claim of a clean binary vulnerability scan or production certification.
-
-Built and tested locally; GitHub Actions were not used.
+Built locally for Windows x64 without GitHub Actions. TypeScript/Vite/AUI contracts,
+Go tests/vet and synthetic native Chrome task/account flows were checked. Phone,
+small dark phone and desktop screenshots use synthetic records. Preview remains
+unsigned; no physical-phone, clean-host, reboot or independent audit claim.
